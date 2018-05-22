@@ -41,8 +41,6 @@ class DataAccess
      */
     public function getAll($path, $arrparams)
     {
-        $this->logger->info(substr(strrchr(rtrim(__CLASS__, '\\'), '\\'), 1).': '.__FUNCTION__);
-
         $table = $this->maintable != '' ? $this->maintable : $path;
 
         $orderby = "";
@@ -74,11 +72,10 @@ class DataAccess
      */
     public function get($path, $args)
     {
-        $this->logger->info(substr(strrchr(rtrim(__CLASS__, '\\'), '\\'), 1).': '.__FUNCTION__);
-
         $table = $this->maintable != '' ? $this->maintable : $path;
 
         $sql = "SELECT * FROM ". $table . ' WHERE ' . implode(',', array_flip($args)) . ' = :' . implode(',', array_flip($args));
+		$this->logger->info("SQL= $sql, ARGS= $args");
 
         $stmt = $this->pdo->prepare($sql);
         // bind the key
@@ -101,8 +98,6 @@ class DataAccess
      */
     public function add($path, $request_data)
     {
-        $this->logger->info(substr(strrchr(rtrim(__CLASS__, '\\'), '\\'), 1).': '.__FUNCTION__);
-
         $table = $this->maintable != '' ? $this->maintable : $path;
 
         if ($request_data == null) {
@@ -131,8 +126,6 @@ class DataAccess
      */
     public function update($path, $args,$request_data)
     {
-        $this->logger->info(substr(strrchr(rtrim(__CLASS__, '\\'), '\\'), 1).': '.__FUNCTION__);
-
         $table = $this->maintable != '' ? $this->maintable : $path;
 
         // if no data to update or not key set = return false
@@ -169,8 +162,6 @@ class DataAccess
      */
     public function delete($path, $args)
     {
-        $this->logger->info(substr(strrchr(rtrim(__CLASS__, '\\'), '\\'), 1).': '.__FUNCTION__);
-
         $table = $this->maintable != '' ? $this->maintable : $path;
 
         $sql = "DELETE FROM ". $table . ' WHERE ' . implode(',', array_flip($args)) . ' = :' . implode(',', array_flip($args));

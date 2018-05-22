@@ -1,0 +1,249 @@
+{
+	"info": {
+		"name": "Woops",
+		"_postman_id": "6d302a8d-889d-8e7f-4dab-1ba25d6deb82",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "token anonymous",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "WOOPS",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "WOOPS",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8888/woops/api/public/oauth/token",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"woops",
+						"api",
+						"public",
+						"oauth",
+						"token"
+					]
+				},
+				"description": "Asking for an anonymous token"
+			},
+			"response": []
+		},
+		{
+			"name": "token logged",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "WOOPS",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "WOOPS",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "martin@yopmail.com",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "yopmail",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8888/woops/api/public/oauth/token",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"woops",
+						"api",
+						"public",
+						"oauth",
+						"token"
+					]
+				},
+				"description": "Asking for an anonymous token"
+			},
+			"response": []
+		},
+		{
+			"name": "token refresh",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "WOOPS",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "WOOPS",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "woops://auth",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "refresh_token",
+							"value": "5ecd3b0725e06f5b11197b5c8b9ead92546c394b",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8888/woops/api/public/oauth/token",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"woops",
+						"api",
+						"public",
+						"oauth",
+						"token"
+					]
+				},
+				"description": "Asking for an anonymous token"
+			},
+			"response": []
+		},
+		{
+			"name": "api authenticated",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8888/woops/api/public/test/authenticated?access_token=854e7987bad3ba30b8e6a9df3c63411ab9b14b1c",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"woops",
+						"api",
+						"public",
+						"test",
+						"authenticated"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "854e7987bad3ba30b8e6a9df3c63411ab9b14b1c",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "api loggued",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8888/woops/api/public/test/authenticated?access_token=854e7987bad3ba30b8e6a9df3c63411ab9b14b1c",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"woops",
+						"api",
+						"public",
+						"test",
+						"authenticated"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "854e7987bad3ba30b8e6a9df3c63411ab9b14b1c",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

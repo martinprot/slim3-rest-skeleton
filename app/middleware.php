@@ -1,24 +1,54 @@
 <?php
 
+use App\Utils\OAuth2Manager as OAuth2Manager;
+use App\Utils\ResponseSerializer as ResponseSerializer;
+use App\DataAccess\UserAccess;
+
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+
 // Application middleware
 
+$middlewares = [];
 
+$middlewares["apiAuth"] = function (Request $request, Response $response, $next) {
+	$oauth = new OAuth2Manager($this->oAuth, $request);
+	if ($oauth->isAuthenticated()) {
+		$this->logger->info("[OAuth2] authentication suceeded");
+		return $next($request, $response);
+	}
+	else {
+		$this->logger->info("[OAuth2] authentication failed!");
+		$error = $this->oAuth->getResponse();
+		$serializer = new ResponseSerializer($response);
+		return $serializer->error(401, $error->getParameters());
+	}
+};
 
-// $app->add(function ($request, $response, $next) {
+$middlewares["userAuth"] = function (Request $request, Response $response, $next) {
+	$oauth = new OAuth2Manager($this->oAuth, $request);
+	if ($oauth->isAuthenticated()) {
+		if ($oauth->isLoggued()) {
+			$userAccess = new UserAccess($this->logger, $this->pdo);
+			$user = $userAccess->getUser($oauth->getUserId());
+			$request = $request->withAttribute('user', $user);
+			$this->logger->info("[OAuth2] authentication suceeded, user: " . $user);
 
-//     $responsen = $response->withHeader('Content-Type', 'application/json')
-//                           ->withHeader('X-Powered-By', $this->settings['PoweredBy']);
-	
-	
-// 	$APIRateLimit = new App\Utils\APIRateLimiter($this);
-// 	$mustbethrottled = $APIRateLimit();
-	
-// 	if ($mustbethrottled == false) {
-//     $responsen = $next($request, $responsen);
-// 	} else {
-//         $responsen = $responsen ->withStatus(429)
-//                                 ->withHeader('RateLimit-Limit', $this->settings['api_rate_limiter']['requests']);
-// 	}
+			return $next($request, $response);
+		}
+		else {
+			$this->logger->info("[OAuth2] user needs to be loggued");
+			$error = $this->oAuth->getResponse();
+			$serializer = new ResponseSerializer($response);
+			return $serializer->error(403, "You must be loggued to access this resource");
+		}
+	}
+	else {
+		$this->logger->info("[OAuth2] authentication failed!");
+		$error = $this->oAuth->getResponse();
+		$serializer = new ResponseSerializer($response);
+		return $serializer->error(401, $error->getParameters());
+	}
+};
 
-//     return $responsen;
-// });
+return $middlewares;

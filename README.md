@@ -10,6 +10,7 @@ My own fork of Pablo Roca skeleton does not change a lot. Check his reamde.md fo
 Differences:
 
 - on OAuth verification: I prefered using middleware instead of an oauth base controller.
+- added refresh_token grant type
 - removed APIRateLimiter
 - renamed some class names
 - added response serializer
@@ -75,6 +76,8 @@ change `OAuth2_CustomStorage` to corresponds to user table, if needed
 ## Testing
 
 Firstly, create a vhost toward `project/public`
+
+All tests can be found as a Postman JSON file in `project/test/postman.json`. For Postman use, import the file and create an Environment with `baseurl` var that represents the url prefix before all resources.
 
 ##### Test oauth anonymous token creation
 

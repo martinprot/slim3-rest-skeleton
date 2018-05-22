@@ -40,12 +40,19 @@ $container['oAuth'] = function ($c) {
     $storage = new App\DataAccess\OAuth2_CustomStorage($c->get('pdo'));
 
     // Pass a storage object or array of storage objects to the OAuth2 server class
-    $server = new OAuth2\Server($storage);
+    $server = new OAuth2\Server($storage, [
+        'access_lifetime' => 86400 // 24 hours
+	]);
     
     // add grant types
 	$server->addGrantType(new OAuth2\GrantType\UserCredentials($storage));
-    $server->addGrantType(new OAuth2\GrantType\ClientCredentials($storage));
-
+	$server->addGrantType(new OAuth2\GrantType\ClientCredentials($storage));
+	$server->addGrantType(new OAuth2\GrantType\RefreshToken($storage, [
+		'refresh_token_lifetime' => 24192000, // 280 days
+        'always_issue_new_refresh_token' => true,
+		'unset_refresh_token_after_use' => false
+	]));
+	
     return $server;
 };
 
