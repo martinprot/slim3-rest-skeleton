@@ -9,6 +9,8 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
+require __DIR__.'/src/Utils/global_functions.php';
+
 // Instantiate the app
 $settings = require __DIR__.'/settings.php';
 $app = new \Slim\App($settings);

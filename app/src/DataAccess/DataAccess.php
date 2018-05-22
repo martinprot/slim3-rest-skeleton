@@ -75,7 +75,6 @@ class DataAccess
         $table = $this->maintable != '' ? $this->maintable : $path;
 
         $sql = "SELECT * FROM ". $table . ' WHERE ' . implode(',', array_flip($args)) . ' = :' . implode(',', array_flip($args));
-		$this->logger->info("SQL= $sql, ARGS= $args");
 
         $stmt = $this->pdo->prepare($sql);
         // bind the key
@@ -106,16 +105,14 @@ class DataAccess
 
         $columnString = implode(',', array_flip($request_data));
         $valueString = ":".implode(',:', array_flip($request_data));
+		$sql = "INSERT INTO " . $table . " (" . $columnString . ") VALUES (" . $valueString . ")";
 
-        $sql = "INSERT INTO " . $table . " (" . $columnString . ") VALUES (" . $valueString . ")";
-        $stmt = $this->pdo->prepare($sql);
-
-        foreach($request_data as $key => $value){
-            $stmt->bindValue(':' . $key,$request_data[$key]);
-        }
-
-        $stmt->execute();
-
+		$stmt = $this->pdo->prepare($sql);			
+		foreach($request_data as $key => $value){
+			$stmt->bindValue(':' . $key,$request_data[$key]);
+		}
+		$stmt->execute();
+			
         return $this->pdo->lastInsertId();
     }
 

@@ -2,34 +2,45 @@
 
 use App\Controllers\TestController;
 use App\Controllers\BaseController;
+use App\Controllers\UserController;
 use App\Controllers\OAuth2TokenController;
 
-
+// ************
 // Middlewares
+// ************
 
 $middlewares = require __DIR__.'/middleware.php';
+$apiAuth = $middlewares["apiAuth"];
+$userAuth = $middlewares["userAuth"];
 
+// ************
 // Routes
-$app->get('/test/authenticated', TestController::class.':needsToBeAuth')->add($middlewares["apiAuth"]);
-$app->get('/test/loggued', TestController::class.':needsToBeLoggued')->add($middlewares["userAuth"]);
+// ************
 
-// oAuth2
-$app->group('/oauth', function () {
-    $this->post('/token', OAuth2TokenController::class.':token');
-});
+// Test
+$app->get('/test/authenticated', TestController::class.':needsToBeAuth')->add($apiAuth);
+$app->get('/test/loggued', TestController::class.':needsToBeLoggued')->add($userAuth);
 
-// Books controller
-$app->group('/books', function () {
-    $this->get   ('',             BaseController::class.':getAll');
-    $this->get   ('/{id:[0-9]+}', BaseController::class.':get');
-    $this->post  ('',             BaseController::class.':add');
-    $this->put   ('/{id:[0-9]+}', BaseController::class.':update');
-    $this->delete('/{id:[0-9]+}', BaseController::class.':delete');
+// OAuth2
+$app->post('/oauth/token', OAuth2TokenController::class.':token');
+
+// User controller
+$app->get('/user', UserController::class.':getAll')->add($apiAuth);
+$app->get('/user/{id:[0-9]+}', UserController::class.':get')->add($apiAuth);
+$app->post('/user', UserController::class.':add')->add($apiAuth);
+$app->put('/user/{id:[0-9]+}', UserController::class.':update')->add($userAuth);
+
+// $app->group('/books', function () {
+//     $this->get   ('',             BaseController::class.':getAll');
+//     $this->get   ('/{id:[0-9]+}', BaseController::class.':get');
+//     $this->post  ('',             BaseController::class.':add');
+//     $this->put   ('/{id:[0-9]+}', BaseController::class.':update');
+//     $this->delete('/{id:[0-9]+}', BaseController::class.':delete');
 //})->add(function ($request, $response, $next) {
 //	$this->settings['localtable'] = "categories";
 //    $response = $next($request, $response);
 //    return $response;
-});
+//});
 
 // Custom Controllers
 //$app->group('/mycustom', function () {

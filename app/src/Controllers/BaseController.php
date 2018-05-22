@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 use App\DataAccess\DataAccess;
+use App\Utils\ResponseSerializer;
 
 /**
  * Class BaseController.
@@ -45,9 +46,11 @@ class BaseController
         $this->logger->info(substr(strrchr(rtrim(__CLASS__, '\\'), '\\'), 1).': '.__FUNCTION__);
 
         $path = explode('/', $request->getUri()->getPath())[1];
-        $arrparams = $request->getParams();
+		$arrparams = $request->getParams();
+		$all = $this->dataaccess->getAll($path, $arrparams);
 
-		return $response->write(json_encode($this->dataaccess->getAll($path, $arrparams)));
+		$serializer = new ResponseSerializer($response);
+		return $serializer->success($all);
     }
 
     /**
@@ -63,11 +66,12 @@ class BaseController
 
         $path = explode('/', $request->getUri()->getPath())[1];
 
+		$serializer = new ResponseSerializer($response);
         $result = $this->dataaccess->get($path, $args);
-        if ($result == null) {
-            return $response ->withStatus(404);
+        if ($result == null) {			
+			return $serializer->error(404, "the resource cannot be found");
         } else {
-            return $response->write(json_encode($result));
+			return $serializer->success($result);
         }
     }
 
@@ -85,7 +89,8 @@ class BaseController
         $path = explode('/', $request->getUri()->getPath())[1];
         $request_data = $request->getParsedBody();
 
-        $last_inserted_id = $this->dataaccess->add($path, $request_data);
+		$last_inserted_id = $this->dataaccess->add($path, $request_data);
+		
         if ($last_inserted_id > 0) {
             $RequesPort = '';
 		    if ($request->getUri()->getPort()!='')
@@ -94,10 +99,11 @@ class BaseController
 		    }
             $LocationHeader = $request->getUri()->getScheme().'://'.$request->getUri()->getHost().$RequesPort.$request->getUri()->getPath().'/'.$last_inserted_id;
 
-            return $response ->withHeader('Location', $LocationHeader)
-                             ->withStatus(201);
+			$serializer = new ResponseSerializer($response->withHeader('Location', $LocationHeader));
+			return $serializer->created();
         } else {
-            return $response ->withStatus(403);
+			$serializer = new ResponseSerializer($response);
+            return $serializer->error(403, "the resource cannot be created");
         }
     }
 
@@ -115,11 +121,12 @@ class BaseController
         $path = explode('/', $request->getUri()->getPath())[1];
         $request_data = $request->getParsedBody();
 
+		$serializer = new ResponseSerializer($response);
         $isupdated = $this->dataaccess->update($path, $args, $request_data);
         if ($isupdated) {
-            return $response ->withStatus(200);
+            return $serializer->updated();
         } else {
-            return $response ->withStatus(404);
+            return $serializer->error(404, "the resource cannot be found");
         }
     }
 
@@ -136,11 +143,12 @@ class BaseController
 
         $path = explode('/', $request->getUri()->getPath())[1];
 
+		$serializer = new ResponseSerializer($response);
         $isdeleted = $this->dataaccess->delete($path, $args);
         if ($isdeleted) {
-            return $response ->withStatus(204);
+            return $serializer->updated();
         } else {
-            return $response ->withStatus(404);
+            return $serializer->error(404, "the resource cannot be found");
         }
     }
 }

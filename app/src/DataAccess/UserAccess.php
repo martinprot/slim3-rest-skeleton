@@ -11,7 +11,7 @@ use PDO;
 class UserAccess extends DataAccess {
 	private static $tablename = "user";
 	private static $idColumn = "id";
-	    
+
     /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \PDO                     $pdo
