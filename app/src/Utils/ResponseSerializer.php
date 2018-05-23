@@ -3,6 +3,7 @@
 namespace App\Utils;
 
 use Psr\Http\Message\ResponseInterface as Response;
+use App\DataAccess\InputException;
 
 class ResponseSerializer {
 
@@ -23,10 +24,10 @@ class ResponseSerializer {
 		return $this->response->withJson($results, 200);
 	}
 
-	public function created() {
+	public function created($id) {
 		$results = array();
 		$results["code"] = 201;
-		$results["content"] = "created";
+		$results["content"] = ["id" => intval($id)];
 		return $this->response->withJson($results, 201);
 	}
 	
@@ -39,9 +40,9 @@ class ResponseSerializer {
 
 	public function deleted() {
 		$results = array();
-		$results["code"] = 204;
+		$results["code"] = 200;
 		$results["content"] = "deleted";
-		return $this->response->withJson($results, 204);
+		return $this->response->withJson($results, 200);
 	}
 
 	// ******************
@@ -54,6 +55,13 @@ class ResponseSerializer {
 		$results["error"] = 0;
 		$results["message"] = $errorMessage;
 		return $this->response->withJson($results, $code);
+	}
+
+	public function inputError(InputException $exception) {
+		$results["code"] = 400;
+		$results["error"] = $exception->getCode();
+		$results["message"] = $exception->getMessage();
+		return $this->response->withJson($results, 400);
 	}
 
 	public function pdoError(\PDOException $exception) {
@@ -71,7 +79,7 @@ class ResponseSerializer {
 		$results["code"] = 403;
 		$results["error"] = $exception->getCode();
 		$results["message"] = $message;
-		return $this->response->withJson($results, $code);
+		return $this->response->withJson($results, 403);
 	}
 };
 

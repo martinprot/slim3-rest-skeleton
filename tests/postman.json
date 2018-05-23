@@ -8,6 +8,29 @@
 	"item": [
 		{
 			"name": "token anonymous",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response contains a token\", function () {",
+							"    var json = pm.response.json();",
+							"    console.log(json);",
+							"/*    pm.expect(json).to.not.be.undefined;",
+							"    pm.expect(json.content.access_token.length).to.be.greaterThan(0);",
+							"    postman.setEnvironmentVariable(\"api_token\", json.content.access_token);*/",
+							"});",
+							""
+						]
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -40,15 +63,11 @@
 					]
 				},
 				"url": {
-					"raw": "localhost:8888/woops/api/public/oauth/token",
+					"raw": "{{baseurl}}/oauth/token",
 					"host": [
-						"localhost"
+						"{{baseurl}}"
 					],
-					"port": "8888",
 					"path": [
-						"woops",
-						"api",
-						"public",
 						"oauth",
 						"token"
 					]
@@ -59,6 +78,32 @@
 		},
 		{
 			"name": "token logged",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response contains a token\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.access_token).to.not.be.undefined;",
+							"    pm.expect(json.access_token.length).to.be.greaterThan(0);",
+							"    postman.setEnvironmentVariable(\"user_token\", json.access_token);",
+							"    ",
+							"    pm.expect(json.refresh_token).to.not.be.undefined;",
+							"    pm.expect(json.refresh_token.length).to.be.greaterThan(0);",
+							"    postman.setEnvironmentVariable(\"refresh_token\", json.refresh_token);",
+							"});",
+							""
+						]
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -103,15 +148,11 @@
 					]
 				},
 				"url": {
-					"raw": "localhost:8888/woops/api/public/oauth/token",
+					"raw": "{{baseurl}}/oauth/token",
 					"host": [
-						"localhost"
+						"{{baseurl}}"
 					],
-					"port": "8888",
 					"path": [
-						"woops",
-						"api",
-						"public",
 						"oauth",
 						"token"
 					]
@@ -122,6 +163,29 @@
 		},
 		{
 			"name": "token refresh",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response contains a token\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.access_token).to.not.be.undefined;",
+							"    var user_token = postman.getEnvironmentVariable(\"user_token\");",
+							"    pm.expect(json.access_token).to.not.be.equal(user_token);",
+							"    postman.setEnvironmentVariable(\"user_token\", json.access_token);",
+							"});",
+							""
+						]
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -159,22 +223,18 @@
 						},
 						{
 							"key": "refresh_token",
-							"value": "5ecd3b0725e06f5b11197b5c8b9ead92546c394b",
+							"value": "{{refresh_token}}",
 							"description": "",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "localhost:8888/woops/api/public/oauth/token",
+					"raw": "{{baseurl}}/oauth/token",
 					"host": [
-						"localhost"
+						"{{baseurl}}"
 					],
-					"port": "8888",
 					"path": [
-						"woops",
-						"api",
-						"public",
 						"oauth",
 						"token"
 					]
@@ -190,22 +250,18 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "localhost:8888/woops/api/public/test/authenticated?access_token=854e7987bad3ba30b8e6a9df3c63411ab9b14b1c",
+					"raw": "{{baseurl}}/test/authenticated?access_token=941ab11402473d6612f571b279f7fc55f3417058",
 					"host": [
-						"localhost"
+						"{{baseurl}}"
 					],
-					"port": "8888",
 					"path": [
-						"woops",
-						"api",
-						"public",
 						"test",
 						"authenticated"
 					],
 					"query": [
 						{
 							"key": "access_token",
-							"value": "854e7987bad3ba30b8e6a9df3c63411ab9b14b1c",
+							"value": "941ab11402473d6612f571b279f7fc55f3417058",
 							"equals": true
 						}
 					]
@@ -216,27 +272,379 @@
 		},
 		{
 			"name": "api loggued",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						]
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "localhost:8888/woops/api/public/test/authenticated?access_token=854e7987bad3ba30b8e6a9df3c63411ab9b14b1c",
+					"raw": "{{baseurl}}/test/loggued?access_token={{user_token}}",
 					"host": [
-						"localhost"
+						"{{baseurl}}"
 					],
-					"port": "8888",
 					"path": [
-						"woops",
-						"api",
-						"public",
 						"test",
-						"authenticated"
+						"loggued"
 					],
 					"query": [
 						{
 							"key": "access_token",
-							"value": "854e7987bad3ba30b8e6a9df3c63411ab9b14b1c",
+							"value": "{{user_token}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "user - create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response should have created a user\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.content).to.not.be.undefined;",
+							"    pm.expect(json.content.id).to.be.greaterThan(0);",
+							"    postman.setEnvironmentVariable(\"userid\", json.content.id);",
+							"",
+							"});",
+							""
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var $username = String(Math.floor(Math.random() * 100000));",
+							"postman.setEnvironmentVariable(\"username\", $username);",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "access_token",
+							"value": "017f6a51980e3a7c7fa2a606ecc9cdb8af672882",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "email",
+							"value": "{{username}}@gmail.com",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "password",
+							"value": "fozeigneoz",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "name",
+							"value": "{{username}}",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "country_code",
+							"value": "FR",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "language",
+							"value": "fr",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "creation_date",
+							"value": "2018-05-28 15:05:36",
+							"type": "text",
+							"description": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/user",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"user"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "user - get all",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response more than 0 results\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.content).to.not.be.undefined;",
+							"    pm.expect(json.content.length).to.be.greaterThan(0);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{baseurl}}/user?access_token={{api_token}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"user"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{api_token}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "user - get one",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response contains the user\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.content.id).to.not.be.undefined;",
+							"    pm.expect(json.content.email).to.not.be.undefined;",
+							"    pm.expect(json.content.name).to.not.be.undefined;",
+							"    var name = postman.getEnvironmentVariable(\"username\");",
+							"    pm.expect(json.content.name).to.be.equal(name);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{baseurl}}/user/{{userid}}?access_token={{api_token}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"user",
+						"{{userid}}"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{api_token}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "user - update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response contains updated\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.content).to.be.equal(\"updated\");",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "martouille@yopmail.com",
+							"type": "text",
+							"description": "",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "563d2c0b1213d3fd1fd5aa521ef751szsz1f5d88dfae",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "name",
+							"value": "martouille",
+							"type": "text",
+							"description": "",
+							"disabled": true
+						},
+						{
+							"key": "country_code",
+							"value": "FR",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "language",
+							"value": "fr",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "creation_date",
+							"value": "2018-05-28 15:05:36",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "access_token",
+							"value": "{{user_token}}",
+							"type": "text",
+							"description": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/user/{{userid}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"user",
+						"{{userid}}"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "user - delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response contains deleted\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.content).to.be.equal(\"deleted\");",
+							"",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{baseurl}}/user/{{userid}}?access_token={{user_token}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"user",
+						"{{userid}}"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{user_token}}",
 							"equals": true
 						}
 					]

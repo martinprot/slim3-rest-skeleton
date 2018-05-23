@@ -9,52 +9,52 @@ use Psr\Http\Message\ResponseInterface as Response;
 use App\DataAccess\UserAccess;
 use App\Utils\ResponseSerializer;
 use App\Utils\APIDate;
+use App\DataAccess\InputException;
 
+use PDO;
 use PDOException;
 
-// TODO: Do not extend BaseController anymore.
+// TODO: Do not extend GenericController anymore.
 // Extends a controller like "ResourceController" for example
 
 /**
- * Class BaseController.
+ * Class GenericController.
  */
-class UserController extends BaseController
+final class UserController extends GenericController
 {
-	// TODO: this should be part of an Interface (here?).
-	private static $dbRequiredFields = ["email", "password", "name", "country_code", "language", "creation_date"];
-	private static $dbOptionalFields = ["date_birth"];
 
-	// TODO: this should be in ResourceController
-	private function bodyFrom(Request $request) {
-		$queryParams = $request->getParsedBody();
-		$all_parameters = array_merge(self::$dbRequiredFields, self::$dbOptionalFields);
-		return array_intersect_key($queryParams, array_flip($all_parameters));
-	}
-	
-    /**
-     * @param \Psr\Log\LoggerInterface       $logger
-     * @param \App\UserAccess                $useraccess
-     */
-    public function __construct(LoggerInterface $logger, UserAccess $useraccess)
+    public function __construct(LoggerInterface $logger, PDO $pdo)
     {
         $this->logger = $logger;
-        $this->dataaccess = $useraccess;
+        $this->dataaccess = new UserAccess($logger, $pdo);
 	}
+
+	public function getAll(Request $request, Response $response, $args)
+    {
+		$arrparams = $request->getParams();
+		try {
+			$all = $this->dataaccess->getAll(null, $arrparams);
+		}
+		catch (PDOException $e) {
+			$serializer = new ResponseSerializer($response);
+			return $serializer->pdoError($e);
+		}
+		catch (InputException $e) {
+			$serializer = new ResponseSerializer($response);
+			return $serializer->inputError($e);
+		}
+		$serializer = new ResponseSerializer($response);
+		return $serializer->success($all);
+    }
 	
 	public function add(Request $request, Response $response, $args) 
 	{
-		$request_data = $this->bodyFrom($request);
-
-		if (!array_keys_exist(self::$dbRequiredFields, $request_data)) {
-			$serializer = new ResponseSerializer($response);
-            return $serializer->error(400, "missing parameter");
-		}
-
+		$request_data = $request->getParsedBody();
 		try {
-			$last_inserted_id = $this->dataaccess->add($path, $request_data);
+			$last_inserted_id = $this->dataaccess->add(null, $request_data);
 			if ($last_inserted_id > 0) {
 				$serializer = new ResponseSerializer($response);
-				return $serializer->created();
+				return $serializer->created($last_inserted_id);
 			} else {
 				$serializer = new ResponseSerializer($response);
 				return $serializer->error(403, "the resource cannot be created");
@@ -63,6 +63,10 @@ class UserController extends BaseController
 		catch (PDOException $e) {
 			$serializer = new ResponseSerializer($response);
             return $serializer->pdoError($e);
+		}
+		catch (InputException $e) {
+			$serializer = new ResponseSerializer($response);
+            return $serializer->inputError($e);
 		}
 	}
 
@@ -77,17 +81,10 @@ class UserController extends BaseController
     {
 		// TODO: check if current user is the loggued one.
 		// ...or an admin? 
-
-		$request_data = $this->bodyFrom($request);
-		
-		if (!array_keys_exist(self::$dbRequiredFields, $request_data)) {
-			$serializer = new ResponseSerializer($response);
-            return $serializer->error(400, "missing parameter");
-		}
-		
+		$request_data = $request->getParsedBody();
 		try {
 			$serializer = new ResponseSerializer($response);
-			$isupdated = $this->dataaccess->update($path, $args, $request_data);
+			$isupdated = $this->dataaccess->update(null, $args, $request_data);
 			if ($isupdated) {
 				return $serializer->updated();
 			} else {
@@ -98,5 +95,32 @@ class UserController extends BaseController
 			$serializer = new ResponseSerializer($response);
             return $serializer->pdoError($e);
 		}
-    }
+		catch (InputException $e) {
+			$serializer = new ResponseSerializer($response);
+            return $serializer->inputError($e);
+		}
+	}
+	
+	public function delete(Request $request, Response $response, $args)
+    {
+		// TODO: check if current user is the loggued one.
+		// ...or an admin? 
+		$serializer = new ResponseSerializer($response);
+		try {
+			$isdeleted = $this->dataaccess->delete(null, $args);
+			if ($isdeleted) {
+				return $serializer->deleted();
+			} else {
+				return $serializer->error(404, "the resource cannot be found");
+			}
+		}
+		catch (PDOException $e) {
+			$serializer = new ResponseSerializer($response);
+            return $serializer->pdoError($e);
+		}
+		catch (InputException $e) {
+			$serializer = new ResponseSerializer($response);
+            return $serializer->inputError($e);
+		}
+	}
 }

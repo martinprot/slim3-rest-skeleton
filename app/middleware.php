@@ -30,9 +30,9 @@ $middlewares["userAuth"] = function (Request $request, Response $response, $next
 	if ($oauth->isAuthenticated()) {
 		if ($oauth->isLoggued()) {
 			$userAccess = new UserAccess($this->logger, $this->pdo);
-			$user = $userAccess->getUser($oauth->getUserId());
+			$user = $userAccess->getById($oauth->getUserId());
 			$request = $request->withAttribute('user', $user);
-			$this->logger->info("[OAuth2] authentication suceeded, user: " . $user);
+			$this->logger->info("[OAuth2] authentication suceeded, user: " . $user["email"]);
 
 			return $next($request, $response);
 		}

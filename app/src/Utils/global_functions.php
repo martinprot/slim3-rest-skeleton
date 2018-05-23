@@ -3,7 +3,6 @@
 function array_keys_exist($keys, $array) {
 	foreach ($keys as $key) {
 		if (!array_key_exists($key, $array)) {
-			printf("missing $key");
 			return false;
 		}
 	}

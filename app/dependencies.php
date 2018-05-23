@@ -3,7 +3,7 @@
 use App\Controllers\TestController;
 
 // Generic Controllers / DataAccess
-use App\Controllers\BaseController;
+use App\Controllers\GenericController;
 use App\DataAccess\DataAccess;
 // User
 use App\Controllers\UserController;
@@ -67,13 +67,12 @@ $container['App\Controllers\TestController'] = function ($c) {
 
 // User Controller
 $container['App\Controllers\UserController'] = function ($c) {
-	$userAccess = new UserAccess($c->get('logger'), $c->get('pdo'));
-    return new UserController($c->get('logger'), $userAccess);
+    return new UserController($c->get('logger'), $c->get('pdo'));
 };
 
 // Generic Controller
-$container['App\Controllers\BaseController'] = function ($c) {
-    return new BaseController($c->get('logger'), $c->get('App\DataAccess\DataAccess'));
+$container['App\Controllers\GenericController'] = function ($c) {
+    return new GenericController($c->get('logger'), $c->get('App\DataAccess\DataAccess'));
 };
 
 // Generic DataAccess

@@ -10,9 +10,9 @@ use App\DataAccess\DataAccess;
 use App\Utils\ResponseSerializer;
 
 /**
- * Class BaseController.
+ * Class GenericController.
  */
-class BaseController
+class GenericController
 {
     /**
      * @var \Psr\Log\LoggerInterface

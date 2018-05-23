@@ -162,7 +162,7 @@ class DataAccess
         $table = $this->maintable != '' ? $this->maintable : $path;
 
         $sql = "DELETE FROM ". $table . ' WHERE ' . implode(',', array_flip($args)) . ' = :' . implode(',', array_flip($args));
-        
+    
         $stmt = $this->pdo->prepare($sql);
         // bind the key
         $stmt->bindValue(':' . implode(',', array_flip($args)), implode(',', $args));
