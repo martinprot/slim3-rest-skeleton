@@ -53,8 +53,9 @@ final class UserController extends GenericController
 		try {
 			$last_inserted_id = $this->dataaccess->add(null, $request_data);
 			if ($last_inserted_id > 0) {
+				$user = $this->dataaccess->getById($last_inserted_id);
 				$serializer = new ResponseSerializer($response);
-				return $serializer->created($last_inserted_id);
+				return $serializer->created($user);
 			} else {
 				$serializer = new ResponseSerializer($response);
 				return $serializer->error(403, "the resource cannot be created");
@@ -79,11 +80,15 @@ final class UserController extends GenericController
      */
     public function update(Request $request, Response $response, $args)
     {
-		// TODO: check if current user is the loggued one.
-		// ...or an admin? 
+		$serializer = new ResponseSerializer($response);
+
+		$authentifiedUser = $request->getAttribute("user");;
+		if ($authentifiedUser["id"] != $args["id"] && $authentifiedUser["admin"] == false) {
+			// wrong connected user
+			return $serializer->error(403, "not authorized.");
+		}
 		$request_data = $request->getParsedBody();
 		try {
-			$serializer = new ResponseSerializer($response);
 			$isupdated = $this->dataaccess->update(null, $args, $request_data);
 			if ($isupdated) {
 				return $serializer->updated();
@@ -92,19 +97,20 @@ final class UserController extends GenericController
 			}
 		}
 		catch (PDOException $e) {
-			$serializer = new ResponseSerializer($response);
             return $serializer->pdoError($e);
 		}
 		catch (InputException $e) {
-			$serializer = new ResponseSerializer($response);
             return $serializer->inputError($e);
 		}
 	}
 	
 	public function delete(Request $request, Response $response, $args)
     {
-		// TODO: check if current user is the loggued one.
-		// ...or an admin? 
+		$authentifiedUser = $request->getAttribute("user");;
+		if ($authentifiedUser["id"] != $args["id"] && $authentifiedUser["admin"] == false) {
+			// wrong connected user
+			return $serializer->error(403, "not authorized.");
+		}
 		$serializer = new ResponseSerializer($response);
 		try {
 			$isdeleted = $this->dataaccess->delete(null, $args);

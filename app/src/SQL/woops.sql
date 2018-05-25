@@ -161,6 +161,7 @@ CREATE TABLE `USER` (
   `language` varchar(2) NOT NULL COMMENT 'iso 639-1',
   `date_subscription` date NOT NULL,
   `date_birth` date DEFAULT NULL,
+  `admin` tinyint(1) NOT NULL DEFAULT '0',
   `id_RANK` smallint(8) UNSIGNED DEFAULT NULL,
   `device_uuid` varchar(30) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

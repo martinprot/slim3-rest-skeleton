@@ -24,10 +24,10 @@ class ResponseSerializer {
 		return $this->response->withJson($results, 200);
 	}
 
-	public function created($id) {
+	public function created($data) {
 		$results = array();
 		$results["code"] = 201;
-		$results["content"] = ["id" => intval($id)];
+		$results["content"] = $data;
 		return $this->response->withJson($results, 201);
 	}
 	
