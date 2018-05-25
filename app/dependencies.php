@@ -1,13 +1,10 @@
 <?php
 
-use App\Controllers\TestController;
-
-// Generic Controllers / DataAccess
-use App\Controllers\GenericController;
-use App\DataAccess\DataAccess;
 // User
+use App\Controllers\TestController;
 use App\Controllers\UserController;
-use App\DataAccess\UserAccess;
+use App\Controllers\PlateformController;
+use App\Controllers\IssueTypeController;
 
 use App\DataAccess\OAuth2_CustomStorage;
 use App\Controllers\OAuth2TokenController;
@@ -41,7 +38,7 @@ $container['pdo'] = function ($c) {
 // oAuth
 $container['oAuth'] = function ($c) {
 	
-    $storage = new App\DataAccess\OAuth2_CustomStorage($c->get('pdo'));
+    $storage = new OAuth2_CustomStorage($c->get('pdo'));
 
     // Pass a storage object or array of storage objects to the OAuth2 server class
     $server = new OAuth2\Server($storage, [
@@ -70,33 +67,17 @@ $container['App\Controllers\UserController'] = function ($c) {
     return new UserController($c->get('logger'), $c->get('pdo'));
 };
 
-// Generic Controller
-$container['App\Controllers\GenericController'] = function ($c) {
-    return new GenericController($c->get('logger'), $c->get('App\DataAccess\DataAccess'));
+// Plateform Controller
+$container['App\Controllers\PlateformController'] = function ($c) {
+    return new PlateformController($c->get('logger'), $c->get('pdo'));
 };
 
-// Generic DataAccess
-$container['App\DataAccess\DataAccess'] = function ($c) {
-	$localtable = $c->get('settings')['localtable']!='' ? $c->get('settings')['localtable'] : '';
-    return new DataAccess($c->get('logger'), $c->get('pdo'), $localtable);
+// IssueType Controller
+$container['App\Controllers\IssueTypeController'] = function ($c) {
+    return new IssueTypeController($c->get('logger'), $c->get('pdo'));
 };
 
 // oAuth Controller for retrieving tokens
 $container['App\Controllers\OAuth2TokenController'] = function ($c) {
     return new OAuth2TokenController($c->get('logger'), $c->get('oAuth'));
 };
-
-
-
-
-
-// Custom Controllers / DataAccess
-// ...
-//$container['App\Controllers\MyCustomController'] = function ($c) {
-//    return new MyCustomController($c->get('logger'), $c->get('App\DataAccess\MyCustomDataAccess'));
-//};
-
-//$container['App\DataAccess\MyCustomDataAccess'] = function ($c) {
-//    return new MyCustomDataAccess($c->get('logger'), $c->get('pdo'), '');
-//};
-

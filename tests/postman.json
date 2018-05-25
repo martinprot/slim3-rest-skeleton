@@ -21,10 +21,9 @@
 							"// Test response contains token",
 							"pm.test(\"response contains a token\", function () {",
 							"    var json = pm.response.json();",
-							"    console.log(json);",
-							"/*    pm.expect(json).to.not.be.undefined;",
-							"    pm.expect(json.content.access_token.length).to.be.greaterThan(0);",
-							"    postman.setEnvironmentVariable(\"api_token\", json.content.access_token);*/",
+							"    pm.expect(json).to.not.be.undefined;",
+							"    pm.expect(json.access_token.length).to.be.greaterThan(0);",
+							"    postman.setEnvironmentVariable(\"api_token\", json.access_token);",
 							"});",
 							""
 						]
@@ -359,7 +358,7 @@
 					"urlencoded": [
 						{
 							"key": "access_token",
-							"value": "017f6a51980e3a7c7fa2a606ecc9cdb8af672882",
+							"value": "{{api_token}}",
 							"type": "text",
 							"description": ""
 						},
@@ -554,7 +553,7 @@
 						},
 						{
 							"key": "password",
-							"value": "563d2c0b1213d3fd1fd5aa521ef751szsz1f5d88dfae",
+							"value": "563d2c0 b1213d3fd1fd5aa521ef751szsz1fd88dfae",
 							"type": "text",
 							"description": ""
 						},
@@ -640,6 +639,338 @@
 					"path": [
 						"user",
 						"{{userid}}"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{user_token}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "plateform - create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response should have created a user\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.content).to.not.be.undefined;",
+							"    pm.expect(json.content.id).to.be.greaterThan(0);",
+							"    postman.setEnvironmentVariable(\"plateformid\", json.content.id);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "access_token",
+							"value": "{{user_token}}",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "name",
+							"value": "martinVOD",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "country_code",
+							"value": "FR",
+							"type": "text",
+							"description": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/plateform",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"plateform"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "plateform - get all",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response more than 0 results\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.content).to.not.be.undefined;",
+							"    pm.expect(json.content.length).to.be.greaterThan(0);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{baseurl}}/plateform?access_token={{api_token}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"plateform"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{api_token}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "plateform - delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response contains deleted\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.content).to.be.equal(\"deleted\");",
+							"",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{baseurl}}/plateform/{{plateformid}}?access_token={{user_token}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"plateform",
+						"{{plateformid}}"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{user_token}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "issue type - create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response should have created a user\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.content).to.not.be.undefined;",
+							"    pm.expect(json.content.id).to.be.greaterThan(0);",
+							"    postman.setEnvironmentVariable(\"issuetypeid\", json.content.id);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "access_token",
+							"value": "{{user_token}}",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "category",
+							"value": "INTERFACE",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "sub_category",
+							"value": "strange_bug",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "explanation",
+							"value": "a very strange bug",
+							"type": "text",
+							"description": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/issuetype",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"issuetype"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "issue type - get all",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response more than 0 results\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.content).to.not.be.undefined;",
+							"    pm.expect(json.content.length).to.be.greaterThan(0);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{baseurl}}/issuetype?access_token={{api_token}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"issuetype"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{api_token}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "issue type - delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test response contains token",
+							"pm.test(\"response contains deleted\", function () {",
+							"    var json = pm.response.json();",
+							"    pm.expect(json.content).to.be.equal(\"deleted\");",
+							"",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{baseurl}}/issuetype/{{issuetypeid}}?access_token={{user_token}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"issuetype",
+						"{{issuetypeid}}"
 					],
 					"query": [
 						{

@@ -131,7 +131,7 @@ CREATE TABLE `ISSUE_TYPE` (
 CREATE TABLE `PLATEFORM` (
   `id` smallint(5) UNSIGNED NOT NULL,
   `name` varchar(50) NOT NULL,
-  `code_country` varchar(2) NOT NULL
+  `country_code` varchar(2) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

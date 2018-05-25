@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
-use App\DataAccess\UserAccess;
+use App\DataAccess\IssueTypeAccess;
 use App\Utils\ResponseSerializer;
 use App\Utils\APIDate;
 use App\DataAccess\InputException;
@@ -15,35 +15,34 @@ use PDO;
 use PDOException;
 
 /**
- * Class UserController.
+ * Class IssueTypeController.
  */
-final class UserController extends GenericController
+final class IssueTypeController extends GenericController
 {
 
     public function __construct(LoggerInterface $logger, PDO $pdo)
     {
         $this->logger = $logger;
-        $this->dataaccess = new UserAccess($logger, $pdo);
+        $this->dataaccess = new IssueTypeAccess($logger, $pdo);
 	}
 
-    public function update(Request $request, Response $response, $args)
-    {
+	public function add(Request $request, Response $response, $args) 
+	{
 		$serializer = new ResponseSerializer($response);
-
 		$authentifiedUser = $request->getAttribute("user");;
-		if ($authentifiedUser["id"] != $args["id"] && $authentifiedUser["admin"] == false) {
-			// wrong connected user
+		if ($authentifiedUser["admin"] == false) {
+			// only for admmin
 			return $serializer->error(403, "not authorized.");
 		}
-		return parent::update($request, $response, $args);
+		return parent::add($request, $response, $args);	
 	}
-	
+
 	public function delete(Request $request, Response $response, $args)
-    {
+	{
 		$serializer = new ResponseSerializer($response);
 		$authentifiedUser = $request->getAttribute("user");;
-		if ($authentifiedUser["id"] != $args["id"] && $authentifiedUser["admin"] == false) {
-			// wrong connected user
+		if ($authentifiedUser["admin"] == false) {
+			// only for admmin
 			return $serializer->error(403, "not authorized.");
 		}
 		return parent::delete($request, $response, $args);

@@ -1,8 +1,9 @@
 <?php
 
 use App\Controllers\TestController;
-use App\Controllers\GenericController;
 use App\Controllers\UserController;
+use App\Controllers\PlateformController;
+use App\Controllers\IssueTypeController;
 use App\Controllers\OAuth2TokenController;
 
 // ************
@@ -10,8 +11,8 @@ use App\Controllers\OAuth2TokenController;
 // ************
 
 $middlewares = require __DIR__.'/middleware.php';
-$apiAuth = $middlewares["apiAuth"];
-$userAuth = $middlewares["userAuth"];
+$apiAuth = $middlewares["apiAuth"];		// anonymous login
+$userAuth = $middlewares["userAuth"];	// user login
 
 // ************
 // Routes
@@ -31,21 +32,10 @@ $app->post('/user', UserController::class.':add')->add($apiAuth);
 $app->put('/user/{id:[0-9]+}', UserController::class.':update')->add($userAuth);
 $app->delete('/user/{id:[0-9]+}', UserController::class.':delete')->add($userAuth);
 
-// $app->group('/books', function () {
-//     $this->get   ('',             GenericController::class.':getAll');
-//     $this->get   ('/{id:[0-9]+}', GenericController::class.':get');
-//     $this->post  ('',             GenericController::class.':add');
-//     $this->put   ('/{id:[0-9]+}', GenericController::class.':update');
-//     $this->delete('/{id:[0-9]+}', GenericController::class.':delete');
-//})->add(function ($request, $response, $next) {
-//	$this->settings['localtable'] = "categories";
-//    $response = $next($request, $response);
-//    return $response;
-//});
+$app->get('/plateform', PlateformController::class.':getAll')->add($apiAuth);
+$app->post('/plateform', PlateformController::class.':add')->add($userAuth);
+$app->delete('/plateform/{id:[0-9]+}', PlateformController::class.':delete')->add($userAuth);
 
-// Custom Controllers
-//$app->group('/mycustom', function () {
-//    $this->get   ('',             MyCustomController::class.':getAll');
-//    $this->post
-//    ...
-//});
+$app->get('/issuetype', IssueTypeController::class.':getAll')->add($apiAuth);
+$app->post('/issuetype', IssueTypeController::class.':add')->add($userAuth);
+$app->delete('/issuetype/{id:[0-9]+}', IssueTypeController::class.':delete')->add($userAuth);
