@@ -15,7 +15,7 @@ Differences:
 - renamed some class names
 - added response serializer
 
-## Information
+## Information about forked project
 
 https://github.com/pabloroca/slim3-simple-rest-skeleton
 
@@ -26,7 +26,7 @@ Steps to have a running server
 ##### clone project
 
 ```
-git clone git@bitbucket.org:martinprot/woops-backend.git
+git clone git@github.com:martinprot/slim3-rest-skeleton.git
 ```
 
 ##### install composer
@@ -72,6 +72,19 @@ change `OAuth2_CustomStorage` to corresponds to user table, if needed
 1. create a `oauth_clients` entry in database, with a `client_id` and a `client_secret`
 
 2. create a user, with an email and the SHA1 of the password https://www.sha1.fr/
+
+##### Credentials:
+
+Database connexion settings are in settings.php. Settings.php requires a db.php file stored out of control version;
+
+Please create it with thoses constants.
+
+```
+define('SERVER','localhost');
+define('USER','your-database-user');
+define('PASS','y0urP4ssw0rd');
+define('DATABASE','your-db-name');
+```
 
 ## Testing
 

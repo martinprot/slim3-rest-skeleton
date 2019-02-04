@@ -2,8 +2,6 @@
 
 use App\Controllers\TestController;
 use App\Controllers\UserController;
-use App\Controllers\PlateformController;
-use App\Controllers\IssueTypeController;
 use App\Controllers\OAuth2TokenController;
 
 // ************
@@ -31,11 +29,3 @@ $app->get('/user/{id:[0-9]+}', UserController::class.':get')->add($apiAuth);
 $app->post('/user', UserController::class.':add')->add($apiAuth);
 $app->put('/user/{id:[0-9]+}', UserController::class.':update')->add($userAuth);
 $app->delete('/user/{id:[0-9]+}', UserController::class.':delete')->add($userAuth);
-
-$app->get('/plateform', PlateformController::class.':getAll')->add($apiAuth);
-$app->post('/plateform', PlateformController::class.':add')->add($userAuth);
-$app->delete('/plateform/{id:[0-9]+}', PlateformController::class.':delete')->add($userAuth);
-
-$app->get('/issuetype', IssueTypeController::class.':getAll')->add($apiAuth);
-$app->post('/issuetype', IssueTypeController::class.':add')->add($userAuth);
-$app->delete('/issuetype/{id:[0-9]+}', IssueTypeController::class.':delete')->add($userAuth);

@@ -3,8 +3,6 @@
 // User
 use App\Controllers\TestController;
 use App\Controllers\UserController;
-use App\Controllers\PlateformController;
-use App\Controllers\IssueTypeController;
 
 use App\DataAccess\OAuth2_CustomStorage;
 use App\Controllers\OAuth2TokenController;
@@ -65,16 +63,6 @@ $container['App\Controllers\TestController'] = function ($c) {
 // User Controller
 $container['App\Controllers\UserController'] = function ($c) {
     return new UserController($c->get('logger'), $c->get('pdo'));
-};
-
-// Plateform Controller
-$container['App\Controllers\PlateformController'] = function ($c) {
-    return new PlateformController($c->get('logger'), $c->get('pdo'));
-};
-
-// IssueType Controller
-$container['App\Controllers\IssueTypeController'] = function ($c) {
-    return new IssueTypeController($c->get('logger'), $c->get('pdo'));
 };
 
 // oAuth Controller for retrieving tokens

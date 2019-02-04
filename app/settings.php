@@ -1,10 +1,12 @@
 <?php
 
 /// CONSTANTS ///
-define('SERVER','localhost');
-define('USER','woopsmaster');
-define('PASS','7jiwKJeP');
-define('DATABASE','woops');
+require __DIR__.'db.php';
+// // db.php shouldn't be stored into version control. Please create it with thoses variables defined:
+// define('SERVER','localhost');
+// define('USER','your-database-user');
+// define('PASS','y0urP4ssw0rd');
+// define('DATABASE','your-db-name');
 
 return [
     'settings' => [
