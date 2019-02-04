@@ -1,0 +1,29 @@
+{
+  "name": "My project",
+  "values": [
+    {
+      "value": "localhost:8888/myproject/api/public",
+      "key": "baseurl",
+      "enabled": true
+    },
+    {
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "value": "OAUTH_CLIENT_ID",
+      "key": "client_id",
+      "enabled": true
+    },
+    {
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "value": "OAUTH_CLIENT_SECRET",
+      "key": "client_secret",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}

@@ -1,7 +1,7 @@
 <?php
 
 /// CONSTANTS ///
-require __DIR__.'db.php';
+require __DIR__.'/db.php';
 // // db.php shouldn't be stored into version control. Please create it with thoses variables defined:
 // define('SERVER','localhost');
 // define('USER','your-database-user');

@@ -62,7 +62,7 @@ At least with a user table:
 
 ```
 CREATE TABLE IF NOT EXISTS `user` ( `id` int(11) NOT NULL, `email` varchar(100) NOT NULL, `password` varchar(100) NOT NULL, `name` varchar(100) NOT NULL) ENGINE=InnoDB AUTO_INCREMENT=1;
-ALTER TABLE `users` ADD PRIMARY KEY (`id`), ADD KEY `email` (`email`);
+ALTER TABLE `user` ADD PRIMARY KEY (`id`), ADD KEY `email` (`email`);
 ```
 
 change `OAuth2_CustomStorage` to corresponds to user table, if needed
@@ -90,7 +90,7 @@ define('DATABASE','your-db-name');
 
 Firstly, create a vhost toward `project/public`
 
-All tests can be found as a Postman JSON file in `project/test/postman.json`. For Postman use, import the file and create an Environment with `baseurl` var that represents the url prefix before all resources.
+All tests can be found as a Postman JSON file in `project/test/postman.json`. For Postman use, import the file, then edit the environment file at `project/test/postman-env.json` and import it.
 
 ##### Test oauth anonymous token creation
 
